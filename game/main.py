@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 3CP Studios
-print("\nStarting programme...\n\n. . .\n")
 
 import threading
 import pygame
@@ -14,6 +12,8 @@ speed = 6
 pygame.init()
 pygame.font.init()
 pygame.event.set_blocked(pygame.MOUSEMOTION)
+
+pygame.display.set_caption("Space Adventure")
 
 class Anim(object):
   """A class to simplify the act of adding animations to sprites."""
@@ -103,10 +103,10 @@ mainloop = True
 FPS = 30
 playtime = 0.0
 
+debug = False
+
 player = None
 clock = pygame.time.Clock()
-
-debug=False
 
 while mainloop:
   # "Clearing" screen
@@ -173,6 +173,7 @@ while mainloop:
   screen.blit(pygame.transform.scale(shipimage.get_next_frame(pygame.time.get_ticks()), (64,64)), (playerX-32, playerY-32))
   
   player = pygame.draw.circle(screen, (255, 28, 28), (round(playerX), round(playerY)), 3)
+  
   if debug:
     screen.blit(textsurface,(0,0))
   else:
@@ -181,4 +182,4 @@ while mainloop:
 
 pygame.quit()
 
-print(f"---------------------------\nGame played for {round(playtime)} seconds.")
+print(f"Game played for {round(playtime)} seconds.")
