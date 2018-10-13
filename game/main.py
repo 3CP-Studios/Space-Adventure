@@ -41,4 +41,4 @@ while mainloop:
 
 pygame.quit()
 
-print(f"Game played for {playtime} seconds.")
+print(f"\nGame played for {playtime} seconds.")
