@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+# Copyright (C) 3CP Studios
+print("\nStarting programme...\n\n. . .\n")
 import threading
 import pygame
 from time import sleep as delay
