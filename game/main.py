@@ -58,7 +58,7 @@ class Anim(object):
 
 myFont=pygame.font.SysFont('Comic Sans MS', 20)
 
-screen = pygame.display.set_mode((640,480)) # Screen size of game window
+screen = pygame.display.set_mode((1280, 720)) # Screen size of game window
 
 background = pygame.Surface(screen.get_size()) # Create empty pygame surface
 background.fill((0,0,0))
