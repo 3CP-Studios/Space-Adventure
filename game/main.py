@@ -106,6 +106,8 @@ playtime = 0.0
 player = None
 clock = pygame.time.Clock()
 
+debug=False
+
 while mainloop:
   # "Clearing" screen
   screen.blit(background,(0, 0))
@@ -131,6 +133,8 @@ while mainloop:
     elif event.type == pygame.KEYDOWN:
       if event.key == pygame.K_ESCAPE:
         mainloop = False # User pressed ESC so close the program
+      elif event.key == pygame.K_m:
+        debug = !debug
       #elif event.key == pygame.K_w: playerY+=-5
       #elif event.key == pygame.K_s: playerY+=5
       #elif event.key == pygame.K_d: playerX+=5
@@ -169,10 +173,12 @@ while mainloop:
   screen.blit(pygame.transform.scale(shipimage.get_next_frame(pygame.time.get_ticks()), (64,64)), (playerX-32, playerY-32))
   
   player = pygame.draw.circle(screen, (255, 28, 28), (round(playerX), round(playerY)), 3)
-  
-  screen.blit(textsurface,(0,0))
+  if render:
+    screen.blit(textsurface,(0,0))
+  else:
+    pass
   pygame.display.flip()
 
 pygame.quit()
 
-print(f"\nGame played for {round(playtime)} seconds.")
+print(f"---------------------------\nGame played for {round(playtime)} seconds.")
