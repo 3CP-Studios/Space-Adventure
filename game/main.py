@@ -144,7 +144,7 @@ while mainloop:
   #t1.start()
   #starz.update()
   #starz.draw(screen)
-  text = f"FPS: {clock.get_fps()}     Playtime: {playtime}"
+  text = f"FPS: {round(clock.get_fps())}     Playtime: {round(playtime)}"
   #pygame.display.set_caption(text)
   textsurface=myFont.render(text, False, (255,255,255))
   
