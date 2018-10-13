@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2018 3CP Studios.
 
-import pygame
+print("\nStarting programme...\n\n. . .\n")
+
+import pygame,numpy,random
 from time import sleep as delay
-import random
-import numpy
 
 pygame.init()
 
