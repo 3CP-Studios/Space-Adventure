@@ -134,7 +134,7 @@ while mainloop:
       if event.key == pygame.K_ESCAPE:
         mainloop = False # User pressed ESC so close the program
       elif event.key == pygame.K_m:
-        debug = !debug
+        debug = not debug
       #elif event.key == pygame.K_w: playerY+=-5
       #elif event.key == pygame.K_s: playerY+=5
       #elif event.key == pygame.K_d: playerX+=5
@@ -173,7 +173,7 @@ while mainloop:
   screen.blit(pygame.transform.scale(shipimage.get_next_frame(pygame.time.get_ticks()), (64,64)), (playerX-32, playerY-32))
   
   player = pygame.draw.circle(screen, (255, 28, 28), (round(playerX), round(playerY)), 3)
-  if render:
+  if debug:
     screen.blit(textsurface,(0,0))
   else:
     pass
