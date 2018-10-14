@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import Game_lib.game
 import threading
 import pygame
 from time import sleep as delay
@@ -8,6 +9,14 @@ import numpy
 from PIL import Image
 
 default_speed=12
+
+# define colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+YELLOW = (255, 255, 0)
 
 speed = default_speed
 
@@ -143,12 +152,35 @@ mainloop = True
 FPS = 30
 playtime = 0.0
 
+class Bullet(pygame.sprite.Sprite):
+  """ This class represents the bullet . """
+  def __init__(self, pos, x, y):
+    # Call the parent class (Sprite) constructor
+    super().__init__()
+    self.x,self.y=x,y
+    self.image = pygame.Surface([4, 10])
+    self.image.fill(WHITE)
+    self.rect = self.image.get_rect()
+    self.rect.x, self.rect.y=pos[0]-2,pos[1]-10
+  def update(self):
+    """ Move the bullet. """
+    self.rect.y -= self.y
+    self.rect.x += self.x
+
 debug = False
 
 player = None
 clock = pygame.time.Clock()
 
+bullet_list=pygame.sprite.Group()
+
+# Importing Game_Lib
+game_lib=Game_lib.game.game(screen, pygame.display)
+game_lib.shoot((playerX, playerY), 10, Game_lib.game.DOWN)
+
 while mainloop:
+  all_sprites=pygame.sprite.Group()
+  
   # "Clearing" screen
   #screen.blit(background,(0, 0))
   screen.fill((0,0,0))
@@ -187,6 +219,13 @@ while mainloop:
     if pygame.key.get_pressed()[pygame.K_s]==1: playerY+=speed
     if pygame.key.get_pressed()[pygame.K_d]==1: playerX+=speed
     if pygame.key.get_pressed()[pygame.K_a]==1: playerX+=-speed
+    if pygame.key.get_pressed()[pygame.K_SPACE]==1: 
+      bullet = Bullet((playerX, playerY),0,30)
+      bullet_list.add(bullet)
+      bullet = Bullet((playerX, playerY),3,30)
+      bullet_list.add(bullet)
+      bullet = Bullet((playerX, playerY),-3,30)
+      bullet_list.add(bullet)
     if debug:
       if pygame.key.get_pressed()[pygame.K_i]==1: speed+=-1
       if pygame.key.get_pressed()[pygame.K_o]==1: speed+=1
@@ -218,7 +257,11 @@ while mainloop:
     shipimage=ship1
     ship=0
   '''
+  
   screen.blit(pygame.transform.scale(shipimage.get_next_frame(pygame.time.get_ticks()), (64,64)), (playerX-32, playerY-32))
+  
+  bullet_list.update()
+  bullet_list.draw(screen)
   
   player = pygame.draw.circle(screen, (255, 28, 28), (round(playerX), round(playerY)), 3)
   
