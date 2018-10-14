@@ -20,6 +20,7 @@ def stream(label,root):
 
 if __name__ == "__main__":
     root = tk.Tk()
+    root.title("3CP Studios")
     my_label = tk.Label(root)
     my_label.pack()
     thread = threading.Thread(target=stream, args=(my_label,root,))
