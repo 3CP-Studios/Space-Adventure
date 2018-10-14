@@ -7,7 +7,9 @@ import random
 import numpy
 from PIL import Image
 
-speed = 6
+default_speed=12
+
+speed = default_speed
 
 bg_speed = 30 #FPS
 
@@ -185,12 +187,16 @@ while mainloop:
     if pygame.key.get_pressed()[pygame.K_s]==1: playerY+=speed
     if pygame.key.get_pressed()[pygame.K_d]==1: playerX+=speed
     if pygame.key.get_pressed()[pygame.K_a]==1: playerX+=-speed
+    if debug:
+      if pygame.key.get_pressed()[pygame.K_i]==1: speed+=-1
+      if pygame.key.get_pressed()[pygame.K_o]==1: speed+=1
+      if pygame.key.get_pressed()[pygame.K_p]==1: speed=default_speed
   #t1 = threading.Thread(target=lambda: input_game(playerX, playerY))
   #t1.daemon=True
   #t1.start()
   #starz.update()
   #starz.draw(screen)
-  text = f"FPS: {round(clock.get_fps())}     Playtime: {round(playtime)}"
+  text = f"FPS: {round(clock.get_fps())}     Playtime: {round(playtime)}     speed={speed}"
   #pygame.display.set_caption(text)
   textsurface=myFont.render(text, False, (255,255,255))
   
