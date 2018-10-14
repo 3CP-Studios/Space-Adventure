@@ -182,4 +182,4 @@ while mainloop:
 
 pygame.quit()
 
-print(f"Game played for {round(playtime)} seconds.")
+print("-"*(16+len(str(round(playtime)))+9)+f"\nGame played for {round(playtime)} seconds.")
