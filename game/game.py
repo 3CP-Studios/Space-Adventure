@@ -232,3 +232,4 @@ pygame.quit()
 
 print("-"*(16+len(str(round(playtime)))+9)+f"\nGame played for {round(playtime)} seconds.")
 
+
