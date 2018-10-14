@@ -9,6 +9,8 @@ from PIL import Image
 
 speed = 6
 
+bg_speed = 30 #FPS
+
 pygame.init()
 pygame.font.init()
 pygame.event.set_blocked(pygame.MOUSEMOTION)
@@ -89,6 +91,42 @@ star15=pygame.image.load("Sprites/star15.png")
 star16=pygame.image.load("Sprites/star16.png")
 star=Anim([star1,star2,star3,star4,star5,star6,star7,star8,star9,star10,star11,star12,star13,star14,star15,star16], 5, -1)
 
+# Creating bg
+bg0=pygame.image.load("Sprites/bg/frame_0_delay-0.1s.png")
+bg1=pygame.image.load("Sprites/bg/frame_1_delay-0.1s.png")
+bg2=pygame.image.load("Sprites/bg/frame_2_delay-0.1s.png")
+bg3=pygame.image.load("Sprites/bg/frame_3_delay-0.1s.png")
+bg4=pygame.image.load("Sprites/bg/frame_4_delay-0.1s.png")
+bg5=pygame.image.load("Sprites/bg/frame_5_delay-0.1s.png")
+bg6=pygame.image.load("Sprites/bg/frame_6_delay-0.1s.png")
+bg7=pygame.image.load("Sprites/bg/frame_7_delay-0.1s.png")
+bg8=pygame.image.load("Sprites/bg/frame_8_delay-0.1s.png")
+bg9=pygame.image.load("Sprites/bg/frame_9_delay-0.1s.png")
+bg10=pygame.image.load("Sprites/bg/frame_10_delay-0.1s.png")
+bg11=pygame.image.load("Sprites/bg/frame_11_delay-0.1s.png")
+bg12=pygame.image.load("Sprites/bg/frame_12_delay-0.1s.png")
+bg13=pygame.image.load("Sprites/bg/frame_13_delay-0.1s.png")
+bg14=pygame.image.load("Sprites/bg/frame_14_delay-0.1s.png")
+bg15=pygame.image.load("Sprites/bg/frame_15_delay-0.1s.png")
+bg16=pygame.image.load("Sprites/bg/frame_16_delay-0.1s.png")
+bg17=pygame.image.load("Sprites/bg/frame_17_delay-0.1s.png")
+bg18=pygame.image.load("Sprites/bg/frame_18_delay-0.1s.png")
+bg19=pygame.image.load("Sprites/bg/frame_19_delay-0.1s.png")
+bg20=pygame.image.load("Sprites/bg/frame_20_delay-0.1s.png")
+bg21=pygame.image.load("Sprites/bg/frame_21_delay-0.1s.png")
+bg22=pygame.image.load("Sprites/bg/frame_22_delay-0.1s.png")
+bg23=pygame.image.load("Sprites/bg/frame_23_delay-0.1s.png")
+bg24=pygame.image.load("Sprites/bg/frame_24_delay-0.1s.png")
+bg25=pygame.image.load("Sprites/bg/frame_25_delay-0.1s.png")
+bg26=pygame.image.load("Sprites/bg/frame_26_delay-0.1s.png")
+bg27=pygame.image.load("Sprites/bg/frame_27_delay-0.1s.png")
+bg28=pygame.image.load("Sprites/bg/frame_28_delay-0.1s.png")
+bg29=pygame.image.load("Sprites/bg/frame_29_delay-0.1s.png")
+bg30=pygame.image.load("Sprites/bg/frame_30_delay-0.1s.png")
+bg31=pygame.image.load("Sprites/bg/frame_31_delay-0.1s.png")
+bg32=pygame.image.load("Sprites/bg/frame_32_delay-0.1s.png")
+bg=Anim([bg0,bg1,bg2,bg3,bg4,bg5,bg6,bg7,bg8,bg9,bg10,bg11,bg12,bg13,bg14,bg15,bg16,bg17,bg18,bg19,bg20,bg21,bg22,bg23,bg24,bg25,bg26,bg27,bg28,bg29,bg30,bg31,bg32], bg_speed)
+
 screen.blit(background, (0,0))
 
 playerX,playerY = screen.get_size()
@@ -110,7 +148,11 @@ clock = pygame.time.Clock()
 
 while mainloop:
   # "Clearing" screen
-  screen.blit(background,(0, 0))
+  #screen.blit(background,(0, 0))
+  screen.fill((0,0,0))
+  
+  screen.blit(pygame.transform.scale(bg.get_next_frame(pygame.time.get_ticks()), (597, 846)),(0, 0))
+  screen.blit(pygame.transform.scale(bg.get_next_frame(pygame.time.get_ticks()), (597, 846)),(round(screen.get_size()[0]/2), 0))
   
   # Big mess because of Star implementation fail
   #starz=pygame.sprite.Group(
@@ -183,3 +225,4 @@ while mainloop:
 pygame.quit()
 
 print("-"*(16+len(str(round(playtime)))+9)+f"\nGame played for {round(playtime)} seconds.")
+
