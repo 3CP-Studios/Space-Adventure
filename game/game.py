@@ -138,6 +138,10 @@ bg31=pygame.image.load("Sprites/bg/frame_31_delay-0.1s.png")
 bg32=pygame.image.load("Sprites/bg/frame_32_delay-0.1s.png")
 bg=Anim([bg0,bg1,bg2,bg3,bg4,bg5,bg6,bg7,bg8,bg9,bg10,bg11,bg12,bg13,bg14,bg15,bg16,bg17,bg18,bg19,bg20,bg21,bg22,bg23,bg24,bg25,bg26,bg27,bg28,bg29,bg30,bg31,bg32], bg_speed)
 
+# Creating aliens
+alien1=pygame.image.load("Sprites/alien1.png")
+alien2=pygame.image.load("Sprites/alien2.png")
+
 screen.blit(background, (0,0))
 
 playerX,playerY = screen.get_size()
@@ -154,12 +158,12 @@ playtime = 0.0
 
 class Bullet(pygame.sprite.Sprite):
   """ This class represents the bullet . """
-  def __init__(self, pos, x, y):
+  def __init__(self, pos, x, y, color):
     # Call the parent class (Sprite) constructor
     super().__init__()
     self.x,self.y=x,y
     self.image = pygame.Surface([4, 10])
-    self.image.fill(WHITE)
+    self.image.fill(color)
     self.rect = self.image.get_rect()
     self.rect.x, self.rect.y=pos[0]-2,pos[1]-10
   def update(self):
@@ -167,12 +171,45 @@ class Bullet(pygame.sprite.Sprite):
     self.rect.y -= self.y
     self.rect.x += self.x
 
+class Alien(pygame.sprite.Sprite):
+  def __init__(self, pos, shoot_rate, color):
+    super().__init__()
+    self.pos, self.rate, self.color = pos,shoot_rate,color
+    if self.color==0: self.image=pygame.transform.scale(alien1,(64,64))
+    else: self.image=pygame.transform.scale(alien2,(64,64))
+    self.rect = self.image.get_rect()
+    self.rect.x,self.rect.y=pos
+    self.bullet(self.rate, self.pos)
+
+  class bullet(threading.Thread):
+    def __init__(self, rate, pos):
+        self.rate, self.pos = rate, pos
+        threading.Thread.__init__(self)
+        threading.Thread.setDaemon(self, True)
+        threading.Thread.start(self)
+    def run(self):
+      while True:
+        bullet = Bullet(self.pos, 0, -20,RED)
+        enemyBulletList.add(bullet)
+        allSprites.add(bullet)
+        bullet = Bullet(self.pos, 3, -20,RED)
+        enemyBulletList.add(bullet)
+        allSprites.add(bullet)
+        bullet = Bullet(self.pos, -3, -20,RED)
+        enemyBulletList.add(bullet)
+        allSprites.add(bullet)
+        delay(self.rate)
+        
+
 debug = False
 
 player = None
 clock = pygame.time.Clock()
 
+allSprites=pygame.sprite.Group()
 bullet_list=pygame.sprite.Group()
+enemyList=pygame.sprite.Group()
+enemyBulletList=pygame.sprite.Group()
 
 # Importing Game_Lib
 game_lib=Game_lib.game.game(screen, pygame.display)
@@ -215,27 +252,37 @@ while mainloop:
       #elif event.key == pygame.K_s: playerY+=5
       #elif event.key == pygame.K_d: playerX+=5
       #elif event.key == pygame.K_a: playerX+=-5
-    if pygame.key.get_pressed()[pygame.K_w]==1: playerY+=-speed
+    '''if pygame.key.get_pressed()[pygame.K_w]==1: playerY+=-speed
     if pygame.key.get_pressed()[pygame.K_s]==1: playerY+=speed
     if pygame.key.get_pressed()[pygame.K_d]==1: playerX+=speed
-    if pygame.key.get_pressed()[pygame.K_a]==1: playerX+=-speed
+    if pygame.key.get_pressed()[pygame.K_a]==1: playerX+=-speed'''
+    if pygame.key.get_pressed()[pygame.K_UP]==1: playerY+=-speed
+    if pygame.key.get_pressed()[pygame.K_DOWN]==1: playerY+=speed
+    if pygame.key.get_pressed()[pygame.K_RIGHT]==1: playerX+=speed
+    if pygame.key.get_pressed()[pygame.K_LEFT]==1: playerX+=-speed
     if pygame.key.get_pressed()[pygame.K_SPACE]==1: 
-      bullet = Bullet((playerX, playerY),0,30)
+      bullet = Bullet((playerX, playerY),0,30,YELLOW)
       bullet_list.add(bullet)
-      bullet = Bullet((playerX, playerY),3,30)
+      bullet = Bullet((playerX, playerY),3,30,YELLOW)
       bullet_list.add(bullet)
-      bullet = Bullet((playerX, playerY),-3,30)
+      bullet = Bullet((playerX, playerY),-3,30,YELLOW)
       bullet_list.add(bullet)
     if debug:
-      if pygame.key.get_pressed()[pygame.K_i]==1: speed+=-1
-      if pygame.key.get_pressed()[pygame.K_o]==1: speed+=1
-      if pygame.key.get_pressed()[pygame.K_p]==1: speed=default_speed
+      if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_i: speed+=-1
+        if event.key == pygame.K_o: speed+=1
+        if event.key == pygame.K_p: speed=default_speed
+        if event.key == pygame.K_z:
+          enemy = Alien((playerX, 10), 1, random.randint(0,1))
+          enemyList.add(enemy)
+          allSprites.add(enemy)
+          print("Enemy spawned.")
   #t1 = threading.Thread(target=lambda: input_game(playerX, playerY))
   #t1.daemon=True
   #t1.start()
   #starz.update()
   #starz.draw(screen)
-  text = f"FPS: {round(clock.get_fps())}     Playtime: {round(playtime)}     speed={speed}"
+  text = f"FPS: {round(clock.get_fps())}     "
   #pygame.display.set_caption(text)
   textsurface=myFont.render(text, False, (255,255,255))
   
@@ -260,13 +307,24 @@ while mainloop:
   
   screen.blit(pygame.transform.scale(shipimage.get_next_frame(pygame.time.get_ticks()), (64,64)), (playerX-32, playerY-32))
   
-  bullet_list.update()
-  bullet_list.draw(screen)
+  allSprites.update()
+  allSprites.draw(screen)
+  for bullet in bullet_list:
+    if bullet.rect.y < -10:
+      bullet_list.remove(bullet)
   
   player = pygame.draw.circle(screen, (255, 28, 28), (round(playerX), round(playerY)), 3)
+  bulletz=''
+  boi=[]
+  for i in bullet_list:
+    bulletz=bulletz+str(i)+'\n'
+    boi.append(i)
   
   if debug:
     screen.blit(textsurface,(0,0))
+    screen.blit(myFont.render(f"Bullets: {len(boi)}",False,(255,255,255)), (0,35))
+    screen.blit(myFont.render(f"speed={speed}",False,(255,255,255)), (0,23))
+    screen.blit(myFont.render(f"Playtime: {round(playtime)}", False, (255,255,255)), (0,11))
   else:
     pass
   pygame.display.flip()

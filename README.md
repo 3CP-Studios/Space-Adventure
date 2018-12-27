@@ -1,4 +1,4 @@
-# Space Adventure (Work-In-Progress)
-A simple space-themed adventure game made using Python, previously using Java.
+# Space Adventure
+A simple space-themed adventure game made using Python, previously using Java. WIP project, code coming soon.
 
-*Made by 3CP Studios, concept by xSlendiX.*
+*Made by 3CP Studios.*
